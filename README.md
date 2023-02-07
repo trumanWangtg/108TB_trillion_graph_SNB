@@ -17,54 +17,11 @@ To get started with LDBC SNB benchmarks, check out the introductory presentation
 The repository contains the following implementations:
 
 * [`Trillion Graph Schema Setup`](tigergraph/ddl/schema.gsql): an implementation about the 108T graph schema setup demonstrating how to triple the LDBC SNB SF30k dataset
-* [`tigergraph`](tigergraph/ddl/load_dynamic.gsql): an implementation about loading jobs demonstrating how the graph loads 108T raw data. 
-* [`tigergraph`](tigergraph/queries):  queries expressed in the [GSQL language](https://www.tigergraph.com/gsql/) with modification to ensure that most queries can activate the whole 108TB dataset
+* [`Loading job`](tigergraph/ddl/load_dynamic.gsql): an implementation about loading jobs demonstrating how the graph loads 108T raw data. 
+* [`Queries`](tigergraph/queries):  queries expressed in the [GSQL language](https://www.tigergraph.com/gsql/) with modification to ensure that most queries can activate the whole 108TB dataset
+* [`Reproducing 108T SNB BI Experiment`](tigergraph/benchmark_on_cluster/README.md): step-by-step instructions of how to reproduce the 108T SNB BI experiment
+
  
 
-## Reproducing SNB BI experiments
-
-Running an SNB BI experiment requires the following steps.
-
-1. Pick a system, e.g. [Umbra](umbra/). Make sure you have the required binaries and licenses available.
-
-1. Generate the data sets using the [SNB Datagen](https://github.com/ldbc/ldbc_snb_datagen_spark/) according to the format described in the system's README.
-
-1. Generate the substitution parameters using the [`paramgen`](paramgen/) tool.
-
-1. Load the data set: set the required environment variables and run the tool's `scripts/load-in-one-step.sh` script.
-
-1. Run the benchmark: set the required environment variables and run the tool's `scripts/benchmark.sh` script.
-
-1. Collect the results in the [`output`](output/) directory of the tool.
-
-:warning:
-Note that deriving official LDBC results requires commissioning an _audited benchmark_, which is a more complex process as it entails code review, cross-validation, etc.
-See [the specification's Auditing chapter](https://ldbcouncil.org/ldbc_snb_docs/ldbc-snb-specification.pdf#chapter.7) for details.
-
-## Cross-validation
-
-To cross-validate the results of two implementations, use two systems.
-Load the data into both, then run the benchmark in validation mode, e.g. [Cypher](cypher/) and [Umbra](umbra/) results.
-Then, run:
-
-```bash
-export SF=10
-
-cd cypher
-scripts/benchmark.sh --validate
-cd ..
-
-cd umbra
-scripts/benchmark.sh --validate
-cd ..
-
-scripts/cross-validate.sh cypher umbra
-```
-
-Note that the cross-validation uses the [numdiff](scripts/numdiff.md) CLI tool.
 
 
-
-## Data sets
-
-Data sets are also being uploaded to the [SURF CWI repository](https://repository.surfsara.nl/datasets/cwi/snb) and expected to be published there in 2023.
