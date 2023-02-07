@@ -1,24 +1,25 @@
-![LDBC_LOGO](https://raw.githubusercontent.com/wiki/ldbc/ldbc_snb_datagen/images/ldbc-logo.png)
+![TG_LOGO](https://github.com/trumanWangtg/108TB_trillion_graph_SNB/blob/main/TigerGraph-Logo.png)
 
-# LDBC SNB Business Intelligence (BI) workload implementations
+# TigerGraph 108 TB Soical Network Graph Implementations
 
-[![Build Status](https://circleci.com/gh/ldbc/ldbc_snb_bi.svg?style=svg)](https://circleci.com/gh/ldbc/ldbc_snb_bi)
+This social network graph loads 108Tb raw data, and contains 217 billion vertices and 1.6 trillion edges/relationships. The 108TB data are inflated based on LDBC SNB official SF-30000 dataset. The LDBC SNB schema and BI workload queries were modified to ensure that most queries can activate the whole 108TB dataset.
 
-Implementations for the BI workload of the [LDBC Social Network Benchmark](https://ldbcouncil.org/ldbc_snb_docs/ldbc-snb-specification.pdf).
+ This experiment was carried out on AWS EC2 72 x r6a.48xlarge instances and not using any containerization/virtualization technology.  Full Disclosure Report of the [108T Social Network Benchmark](https://docs.google.com/document/d/1h4PnZGpg8-HYBvIHjjgdeonchZo7hSHfEK8IsTrTZN0/edit). (document to be replaced) 
 
-To get started with the LDBC SNB benchmarks, check out our introductory presentation: [The LDBC Social Network Benchmark](https://docs.google.com/presentation/d/1p-nuHarSOKCldZ9iEz__6_V3sJ5kbGWlzZHusudW_Cc/) ([PDF](https://ldbcouncil.org/docs/presentations/ldbc-snb-2021-12.pdf)).
 
-:scroll: If you wish to cite the LDBC SNB, please refer to the [documentation repository](https://github.com/ldbc/ldbc_snb_docs#how-to-cite-ldbc-benchmarks) ([bib snippet](https://github.com/ldbc/ldbc_snb_docs/blob/dev/bib/specification.bib)).
+
+To get started with LDBC SNB benchmarks, check out the introductory presentation: [The LDBC Social Network Benchmark](https://docs.google.com/presentation/d/1p-nuHarSOKCldZ9iEz__6_V3sJ5kbGWlzZHusudW_Cc/) ([PDF](https://ldbcouncil.org/docs/presentations/ldbc-snb-2021-12.pdf)).
+
+
 
 ## Implementations
 
 The repository contains the following implementations:
 
-* [`cypher`](cypher/): an implementation using the [Neo4j graph database management system](https://dbdb.io/db/neo4j) with queries expressed in the [Cypher language](https://neo4j.com/developer/cypher/)
-* [`umbra`](umbra/): an implementation using the [Umbra JIT-compiled columnar relational database management system](https://dbdb.io/db/umbra) with expressed in SQL queries written in the PostgreSQL dialect
-* [`tigergraph`](tigergraph/): an implementation using the [TigerGraph graph database management system](https://dbdb.io/db/tigergraph) with queries expressed in the [GSQL language](https://www.tigergraph.com/gsql/)
-
-All implementations use Docker containers for ease of setup and execution. However, the setups can be adjusted to use a non-containerized DBMS.
+* [`Trillion Graph Schema Setup`](tigergraph/ddl/schema.gsql): an implementation about the 108T graph schema setup demonstrating how to triple the LDBC SNB SF30k dataset
+* [`tigergraph`](tigergraph/ddl/load_dynamic.gsql): an implementation about loading jobs demonstrating how the graph loads 108T raw data. 
+* [`tigergraph`](tigergraph/queries):  queries expressed in the [GSQL language](https://www.tigergraph.com/gsql/) with modification to ensure that most queries can activate the whole 108TB dataset
+ 
 
 ## Reproducing SNB BI experiments
 
@@ -62,14 +63,8 @@ scripts/cross-validate.sh cypher umbra
 
 Note that the cross-validation uses the [numdiff](scripts/numdiff.md) CLI tool.
 
-## Usage
 
-See [`.circleci/config.yml`](.circleci/config.yml) for an up-to-date example on how to use the projects in this repository.
 
 ## Data sets
-
-[Pre-generated data sets and parameters](snb-bi-pre-generated-data-sets.md) are now available for
-SF1-SF10,000 (projected FK variant) and
-SF1-SF1,000 (merged FK variant).
 
 Data sets are also being uploaded to the [SURF CWI repository](https://repository.surfsara.nl/datasets/cwi/snb) and expected to be published there in 2023.
