@@ -4,32 +4,13 @@
 ## Set up the cluster
 ### A. Create EC2 instances via [AWS Management Console](https://aws.amazon.com/console/). 
 
-The number of machines is dependent on the data size and machine memory. 
-
-On the `Launch instances page` under `EC2` service:
-
-- Name: `e.g., SF1000`;
-
-- Application and OS Images: select
-`Amazon Linux 2 AMI(HVM) Kernel 5.10, SSD Volume Type`;
-
-- Instance type: select `e.g., r6a.8xlarge` for SF-1000;
-- Key pair: select `benchmark` or create new key pair;
-- Network settings: `Select existing security group` -> select `TigerGraphCluster`
-- Configure storage: `e.g., Size: 1000Gib; Volume type: gp3; IOPS: 16000; Throughput: 1000` for SF-1000. 
-
-Others are default settings.
-
-|Config         |SF100      |SF1000     |SF10000    |
-|---------------|-----------|-----------|-----------|
-|Instance type  |r6a.4xlarge|r6a.8xlarge|r6a.8xlarge|
-|Instance number|1          |4          |48         |
-|Storage(GiB)   |400        |1000       |1000       |
+Launched 72 x r6a.48xlarge instances via AWS EC2.
+Each instance attaches 6TB gp3 volumes. 
 
 ### B. Configure intances and Set up TigerGraph Cluster
 1. Obtian public IP addresses of all instances and save to a file
     ```sh
-    aws ec2 describe-instances --filters "Name=instance-type,Values=r6a.xlarge" --query "Reservations[].Instances[].PublicIpAddress" | sed '1d' | sed '$d' | sed '1,$s/"//g'| sed '1,$s/,//g' > ip_list
+    aws ec2 describe-instances --filters "Name=instance-type,Values=r6a.48xlarge" --query "Reservations[].Instances[].PublicIpAddress" | sed '1d' | sed '$d' | sed '1,$s/"//g'| sed '1,$s/,//g' > ip_list
     ```
 2. Setup all instances.
     ```sh
@@ -71,7 +52,7 @@ vi ip_list
 
 Modify the password of TigerGraph user in `download_all.py`, then run
 ```sh
-python3 download_all.py 10000 ./ip_list -k ./key.json -t 20
+python3 download_all.py 30000 ./ip_list -k ./key.json -t 20
 ```
 This script will run `./k8s/download_decompress.sh` on all the machines, the downloaded data is located in `~/sf10000`. Usage of the `download_all.py` is 
 ```sh
